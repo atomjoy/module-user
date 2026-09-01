@@ -44,7 +44,7 @@ tsconfig.json
         "paths": {
             /* Specify a set of entries that re-map imports to additional lookup locations. */
             "@/*": ["./resources/js/*"],
-            "@Modules/*": ["./modules/*"]
+            "@Mod/*": ["./modules/*"]
         },
 }
 ```
