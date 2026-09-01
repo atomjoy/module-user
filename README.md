@@ -12,7 +12,40 @@ composer.json
         "psr-4": {
             "Mod\\": "modules"
         }
+    }
+}
+```
+
+## Vite Alias
+
+vite.config.js
+
+```js
+import path from 'path';
+
+export default defineConfig({
+    // Aliasy dla komponentów vue (optional)
+    resolve: {
+        alias: {
+            '@Mod': __dirname + '/modules',
+            // '@Mod': path.resolve(__dirname, './modules'),
+            // '@ModUser': path.resolve(__dirname, './modules/User/Resources'),
+        },
     },
+}
+```
+
+## TS
+
+tsconfig.json
+
+```json
+"compilerOptions": {
+        "paths": {
+            /* Specify a set of entries that re-map imports to additional lookup locations. */
+            "@/*": ["./resources/js/*"],
+            "@Modules/*": ["./modules/*"]
+        },
 }
 ```
 
@@ -74,12 +107,12 @@ void createInertiaApp({
         // Inertia::render('Blog::Website/Index'); -> Modules/Blog/Resources/Pages/Website/Index.vue
         if (name.includes('::')) {
             const [module, page] = name.split('::');
-            // Szukamy pliku w katalogu konkretnego modułu            
+            // Szukamy pliku w katalogu konkretnego modułu
             return resolvePageComponent(
-                `../../modules/${module}/Resources/Pages/${page}.vue`,                
+                `../../modules/${module}/Resources/Pages/${page}.vue`,
                 import.meta.glob<DefineComponent>(`../../modules/**/Resources/Pages/**/*.vue`)
             );
-        }        
+        }
         // Main pages
         return resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue'));
     },
@@ -98,7 +131,7 @@ phpunit.xml
     <!-- Dodaj tę sekcję do phpunit.xml -->
     <testsuite name="Modules">
         <directory>modules/*/Tests</directory>
-    </testsuite>    
+    </testsuite>
 </testsuites>
 ```
 
@@ -125,8 +158,8 @@ test('użytkownik może wyświetlić profil renderowany przez Vue i Inertia', fu
             // Weryfikacja kontraktu danych z frontu i backendu
             $page->component('User::Profile')
                  ->has('name')
-                 ->where('name', 'Jan Kowalski');            
-            
+                 ->where('name', 'Jan Kowalski');
+
             // Inteligentne sprawdzenie fizycznego istnienia pliku Vue w module
             $componentName = $page->toArray()['component'];
             [$module, $path] = explode('::', $componentName);
@@ -180,12 +213,12 @@ class UserServiceProvider extends ServiceProvider
     {
         // Ładowanie systemu eventów komponentu
         $this->app->register(\Mod\User\Providers\EventServiceProvider::class);
-        
+
         // $this->mergeConfigFrom(__DIR__ . '/Config/user.php', 'module-user');
 
         // Automatyczne zaimportowanie i rejestracja zewnętrznego Service Providera
         // $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
-        
+
         // Możesz też zaimportować swój wewnętrzny sub-provider, np.:
         // $this->app->register(\Mod\User\Providers\AuthServiceProvider::class);
 
@@ -234,7 +267,7 @@ class User extends Authenticatable
      */
     protected static function newFactory()
     {
-        return UserFactory::new();        
+        return UserFactory::new();
     }
 
     /**
@@ -290,7 +323,7 @@ modules/User/
 │   └── Api/
 │       └── UserController.php        # Kontroler dla tras API (zwracający JSON)
 │
-├── Middleware/            
+├── Middleware/
 │   └── IsAdmin.php                   # Przykładowe middleware sprawdzające uprawnienia
 │
 ├── Database/
