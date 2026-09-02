@@ -137,13 +137,14 @@ phpunit.xml
 
 ## Pest config
 
-Zawsze dodawaj w teście z modułu!!!
+Zawsze importuj w teście z modułu!!!
 
 ```php
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+use Tests\TestCase;
 use function Pest\Laravel\get;
 use function Pest\Laravel\seed;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 uses(TestCase::class);
 uses(RefreshDatabase::class);
 
