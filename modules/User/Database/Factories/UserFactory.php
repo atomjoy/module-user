@@ -7,7 +7,7 @@ use Mod\User\Models\User;
 
 class UserFactory extends Factory
 {
-    protected $model = User::class; // <-- Powiązanie z modelem modułu
+    protected $model = User::class;
 
     public function definition(): array
     {

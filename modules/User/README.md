@@ -104,7 +104,7 @@ void createInertiaApp({
     },
     resolve: name => {
         // Jeśli nazwa komponentu inertia zawiera "::" (np. "User::Profile/Index")
-        // Inertia::render('Blog::Website/Index'); -> Modules/Blog/Resources/Pages/Website/Index.vue
+        // Inertia::render('Blog::Website/Index'); -> modules/Blog/Resources/Pages/Website/Index.vue
         if (name.includes('::')) {
             const [module, page] = name.split('::');
             // Szukamy pliku w katalogu konkretnego modułu
@@ -175,16 +175,20 @@ test('użytkownik może wyświetlić profil renderowany przez Vue i Inertia', fu
 ## Run Test
 
 ```sh
+# Module test
+php artisan migrate:fresh --seed
+php artisan test
+
 # Pojedyńczy test
 php artisan test --filter=UserModuleTest
 
-# Wszystkie moduły
+# Wszystkie moduły z grupy
 php artisan test --testsuite=Modules
 ```
 
-## Laravel User Model
+## Laravel User Model (optional)
 
-Update Laravel default User model **php artisan config:publish auth**.
+Overwrite Laravel default User model **php artisan config:publish auth**.
 
 ```php
 'providers' => [
@@ -193,122 +197,6 @@ Update Laravel default User model **php artisan config:publish auth**.
         'model' => Mod\User\Models\User::class,
     ],
 ],
-```
-
-## Module Service Provider
-
-modules/User/UserServiceProvider.php
-
-```php
-<?php
-
-namespace Mod\User;
-
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Route;
-
-class UserServiceProvider extends ServiceProvider
-{
-    public function register(): void
-    {
-        // Ładowanie systemu eventów komponentu
-        $this->app->register(\Mod\User\Providers\EventServiceProvider::class);
-
-        // $this->mergeConfigFrom(__DIR__ . '/Config/user.php', 'module-user');
-
-        // Automatyczne zaimportowanie i rejestracja zewnętrznego Service Providera
-        // $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
-
-        // Możesz też zaimportować swój wewnętrzny sub-provider, np.:
-        // $this->app->register(\Mod\User\Providers\AuthServiceProvider::class);
-
-        // if ($this->app->isLocal()) { // Dev services packages }
-    }
-
-    public function boot(): void
-    {
-        // Rejestracja migracji modułu
-        $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
-
-        // Widoki
-        $this->loadViewsFrom(__DIR__ . '/Views', 'module-user');
-
-        // Trasy web
-        Route::middleware('web')->namespace('Mod\User\Controllers')->group(__DIR__ . '/Routes/web.php');
-
-        // Trasy api
-        Route::middleware('api')->prefix('api')->namespace('Mod\User\Controllers\Api')->group(__DIR__ . '/Routes/api.php');
-
-        // Translate
-        $this->loadJsonTranslationsFrom(__DIR__ . '/Lang');
-    }
-}
-```
-
-## Model
-
-```php
-<?php
-
-namespace Mod\User\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Mod\User\Database\Factories\UserFactory;
-
-class User extends Authenticatable
-{
-    use HasFactory;
-
-    protected $guarded = [];
-
-    /**
-     * Wskazanie dedykowanej fabryki dla modelu komponentu.
-     */
-    protected static function newFactory()
-    {
-        return UserFactory::new();
-    }
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'two_factor_confirmed_at' => 'datetime',
-        ];
-    }
-}
-```
-
-## Factory
-
-```php
-<?php
-
-namespace Mod\User\Database\Factories;
-
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Mod\User\Models\User;
-
-class UserFactory extends Factory
-{
-    protected $model = User::class; // <-- Powiązanie z modelem modułu
-
-    public function definition(): array
-    {
-        return [
-            'name' => $this->faker->name(),
-            'email' => $this->faker->unique()->safeEmail(),
-            'password' => bcrypt('secret'),
-        ];
-    }
-}
 ```
 
 ## Tree
@@ -332,7 +220,7 @@ modules/User/
 │   ├── Migrations/
 │   │   └── 2026_01_01_000000_...     # Migracje bazy danych (np. create_module_users_table)
 │   └── Seeders/
-│       └── UserModuleSeeder.php      # Seeder zasilający bazę (Jan Kowalski ID 1, Anna Nowak ID 2)
+│       └── ModuleSeeder.php          # Seeder zasilający bazę (Jan Kowalski ID 1, Anna Nowak ID 2)
 │
 ├── Events/
 │   └── UserRegistered.php            # Klasa zdarzenia (Event DTO)

@@ -4,11 +4,17 @@ namespace Mod\User;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Mod\User\Traits\HasModuleSeeder;
 
 class UserServiceProvider extends ServiceProvider
 {
+    use HasModuleSeeder;
+
     public function register(): void
     {
+        // Konfig
+        $this->mergeConfigFrom(__DIR__ . '/Config/Config.php', 'module-user');
+
         // Ładowanie systemu eventów komponentu
         $this->app->register(\Mod\User\Providers\EventServiceProvider::class);
 
@@ -17,8 +23,6 @@ class UserServiceProvider extends ServiceProvider
             \Illuminate\Contracts\Auth\Authenticatable::class,
             \Mod\User\Models\User::class
         );
-
-        // $this->mergeConfigFrom(__DIR__ . '/Config/user.php', 'module-user');
 
         // Automatyczne zaimportowanie i rejestracja zewnętrznego Service Providera
         // $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
@@ -34,8 +38,17 @@ class UserServiceProvider extends ServiceProvider
         // Rejestracja migracji modułu
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
 
+        // Load module permission and roles
+        $this->autoloadModuleSeeder(\Mod\User\Database\Seeders\UserPermissionsSeeder::class);
+
         // Widoki
         $this->loadViewsFrom(__DIR__ . '/Views', 'module-user');
+
+        // Tłumaczenia (używasz potem: __('module-user::messages.welcome'))
+        $this->loadTranslationsFrom(__DIR__ . '/../Lang', 'module-user');
+
+        // Tłumaczenia json en.json
+        $this->loadJsonTranslationsFrom(__DIR__ . '/Lang');
 
         // Trasy web
         Route::middleware('web')->namespace('Mod\User\Controllers')->group(__DIR__ . '/Routes/web.php');
@@ -43,10 +56,7 @@ class UserServiceProvider extends ServiceProvider
         // Trasy api
         Route::middleware('api')->prefix('api')->namespace('Mod\User\Controllers\Api')->group(__DIR__ . '/Routes/api.php');
 
-        // Tłumaczenia (używasz potem: __('module-user::messages.welcome'))
-        $this->loadTranslationsFrom(__DIR__ . '/../Lang', 'module-user');
-
-        // Tłumaczenia json en.json
-        $this->loadJsonTranslationsFrom(__DIR__ . '/Lang');
+        // Load routes
+        // $this->loadRoutesFrom(__DIR__ . '/Routes/dev.php');
     }
 }

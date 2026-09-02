@@ -8,12 +8,9 @@ use Mod\User\Listeners\SendWelcomeEmail;
 
 class EventServiceProvider extends ServiceProvider
 {
-    /**
-     * Mapa zdarzeń i przypisanych do nich słuchaczy dla modułu User.
-     */
     protected $listen = [
         UserRegistered::class => [
-            SendWelcomeEmail::class,            
+            SendWelcomeEmail::class,
         ],
     ];
 

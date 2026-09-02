@@ -12,19 +12,11 @@ class User extends Authenticatable
 
     protected $guarded = [];
 
-    /**
-     * Wskazanie dedykowanej fabryki dla modelu komponentu.
-     */
     protected static function newFactory()
     {
-        return UserFactory::new();        
+        return UserFactory::new();
     }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
