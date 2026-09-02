@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Mod\User\Database\Factories\UserFactory;
 use Mod\User\Traits\HasDynamicFields;
 use Spatie\Permission\Traits\HasRoles;
@@ -31,7 +32,7 @@ class User extends Authenticatable implements PasskeyUser, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
-    use HasRoles, HasDynamicFields;
+    use HasRoles, HasApiTokens, HasDynamicFields;
 
     protected $fillable = ['name', 'email', 'password'];
     protected $hidden = ['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'];
