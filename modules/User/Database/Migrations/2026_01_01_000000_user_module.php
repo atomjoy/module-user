@@ -18,15 +18,14 @@ return new class extends Migration
             throw new \RuntimeException($msg);
         }
 
-        app()[PermissionRegistrar::class]->forgetCachedPermissions();
-
-        Permission::create(['name' => 'module-user.dummy.permission']);
+        // !!! Nigdy nie populuj w migracji gdyż RefreshDatabase będzie psuło testy !!!
+        // app()[PermissionRegistrar::class]->forgetCachedPermissions();
+        // Permission::create(['name' => 'module-user.dummy.permission']);
     }
 
     public function down(): void
     {
         Permission::whereIn('name', ['module-user.dummy.permission'])->delete();
-
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 };

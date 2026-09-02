@@ -7,7 +7,7 @@ use Mod\User\EnabledModules;
 use Mod\User\Traits\MapsModulePermissions;
 
 /**
- * Dodaje uprawnienia z listy włączinych modułów EnabledModules::list()
+ * Dodaje uprawnienia z listy włączonych modułów EnabledModules::list()
  */
 class AppPermissionSeeder extends Seeder
 {

@@ -3,6 +3,7 @@
 namespace Mod\User;
 
 use Mod\User\Contracts\ModulePermissions;
+use Mod\User\Enums\Permissions\SystemPermission;
 
 /**
  * Module settings
@@ -16,29 +17,29 @@ class Module implements ModulePermissions
 
     public static function getPrefix(): string
     {
+        // Nazwa modułu z service providera lub np. blog, finance, biling, community, partner, system
         return 'module-user';
     }
 
     public static function getPermissions(): array
     {
         return [
-            'module-user.users.create',
-            'module-user.users.edit',
-            'module-user.users.delete',
-            'module-user.users.view',
+            ...SystemPermission::values()
         ];
     }
 
     public static function getDefaultRoles(): array
     {
+        // Tworzy role dynamicznie jeżeli nie istnieją (admin, manager)!!!
         return [
             'admin' => [
-                'module-user.users.create',
-                'module-user.users.edit',
-                'module-user.users.view',
+                SystemPermission::USERS_CREATE->value,
+                SystemPermission::USERS_EDIT->value,
+                SystemPermission::USERS_VIEW->value,
+                SystemPermission::LIMIT_BYPASS->value,
             ],
             'manager' => [
-                'module-user.users.view'
+                SystemPermission::USERS_VIEW->value,
             ],
         ];
     }

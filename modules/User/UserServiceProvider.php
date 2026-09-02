@@ -2,10 +2,14 @@
 
 namespace Mod\User;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Mod\User\Traits\HasModuleSeeder;
 
+/**
+ * User Service import always first!
+ */
 class UserServiceProvider extends ServiceProvider
 {
     use HasModuleSeeder;

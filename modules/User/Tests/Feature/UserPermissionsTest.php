@@ -31,6 +31,6 @@ test('w bazie danych nie istnieją żadne dzikie lub nieprzypisane uprawnienia',
     $definedPermissions = Module::getPermissions();
     $dbPermissions = Permission::pluck('name')->toArray();
     foreach ($dbPermissions as $dbPermission) {
-        expect([...$definedPermissions, 'module-user.dummy.permission'])->toContain($dbPermission);
+        expect([...$definedPermissions])->toContain($dbPermission);
     }
 });

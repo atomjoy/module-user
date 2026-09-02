@@ -2,6 +2,21 @@
 
 Lokalizacja modułów: **modules/{Module}** w projekcie Laravel.
 
+## Require
+
+```sh
+# Instalacja
+composer require spatie/laravel-permission
+
+# Konfiguracja
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+php artisan optimize:clear
+php artisan migrate
+
+# Zmień nazwę pliku Spatie permissions db migration
+0002_01_01_000003_create_permission_tables.php
+```
+
 ## Composer
 
 composer.json
@@ -16,7 +31,7 @@ composer.json
 }
 ```
 
-## Vite Alias
+## Vite alias
 
 vite.config.js
 
@@ -69,7 +84,7 @@ app.blade.php
 @vite(['resources/css/app.css', 'resources/js/app.ts'])
 ```
 
-## Vue Inertia
+## Inertia
 
 app.ts
 
@@ -122,7 +137,7 @@ initializeTheme();
 initializeFlashToast();
 ```
 
-## PHPUnit / Pest config
+## Pest config
 
 phpunit.xml
 
@@ -135,15 +150,17 @@ phpunit.xml
 </testsuites>
 ```
 
-## Pest config
+## Pest test
 
-Zawsze dodawaj w teście z modułu!!!
+Zawsze importuj w teście z modułu!!!
 
 ```php
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+// Dodaj importy
+use Tests\TestCase;
 use function Pest\Laravel\get;
 use function Pest\Laravel\seed;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 uses(TestCase::class);
 uses(RefreshDatabase::class);
 
@@ -172,10 +189,13 @@ test('użytkownik może wyświetlić profil renderowany przez Vue i Inertia', fu
 });
 ```
 
-## Run Test
+## Test
+
+Nigdy nie populuj w migracji gdyż **RefreshDatabase** będzie psuło testy!!!
 
 ```sh
 # Module test
+php artisan optimize:clear
 php artisan migrate:fresh --seed
 php artisan test
 
@@ -186,9 +206,9 @@ php artisan test --filter=UserModuleTest
 php artisan test --testsuite=Modules
 ```
 
-## Laravel User Model (optional)
+## Laravel User model (optional, bind() in UserServiceProvider model)
 
-Overwrite Laravel default User model **php artisan config:publish auth**.
+Nie zaszkodzi nadpisać domyślny model użytkownika w Laravel **php artisan config:publish auth**.
 
 ```php
 'providers' => [
@@ -199,7 +219,7 @@ Overwrite Laravel default User model **php artisan config:publish auth**.
 ],
 ```
 
-## Tree
+## Struktura katalogów
 
 ```txt
 modules/User/
@@ -247,11 +267,15 @@ modules/User/
 │       └── UserModuleTest.php        # Testy Pest (Web, API z JSON, Seeder, asercja pliku Vue)
 │
 ├── Views/
+│   ├── permissions.blade.php         # Przykładwy widok uprawnień dla wszystkich modułów (admin)
 │   └── profile.blade.php             # Tradycyjny widok Blade (dostępny jako module-user::profile)
 │
 ├── Routes/
 │   ├── api.php                       # Plik z trasami API (automatyczny prefiks /api/users)
 │   └── web.php                       # Plik z trasami WEB (np. /blade/profile, /vue/profil)
+│
+├── EnabledModules.php                # Lista modułów uruchomionych w aplikacji (admin)
+├── Module.php                        # Ustawienia modułu, uprawnienia userów (admin)
 │
 └── UserServiceProvider.php           # Główny Service Provider modułu (ładuje trasy, widoki, migracje, config)
 ```

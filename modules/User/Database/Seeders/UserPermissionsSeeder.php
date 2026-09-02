@@ -4,6 +4,7 @@
 namespace Mod\User\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Mod\User\Database\Seeders\RoleSeeder;
 use Mod\User\Traits\MapsModulePermissions;
 use Mod\User\Module;
 
@@ -13,6 +14,10 @@ class UserPermissionsSeeder extends Seeder
 
     public function run(): void
     {
+        $this->call([
+            RoleSeeder::class,
+        ]);
+
         $this->seedModulePermissions(Module::class);
     }
 }

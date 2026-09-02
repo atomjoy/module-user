@@ -31,6 +31,6 @@ class PermissionController extends Controller
             return explode('.', $permission->name)[0];
         });
 
-        return view('module-user::permissions.index', compact('groupedPermissions'));
+        return view('module-user::permissions', compact('groupedPermissions'));
     }
 }

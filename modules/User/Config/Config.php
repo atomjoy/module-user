@@ -2,5 +2,5 @@
 
 return [
     'name' => 'User',
-    'prefix' => 'module-user',
+    'prefix' => 'module-user'
 ];

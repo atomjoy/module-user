@@ -9,8 +9,7 @@ uses(\Tests\TestCase::class);
 uses(RefreshDatabase::class);
 
 test('glowny DatabaseSeeder automatycznie uruchamia UserPermissionsSeeder przez mechanizm autoload', function () {
-    // Loaded from this module migration +1 (module-user.dummy.permission)
-    expect(Permission::count())->toBe(1);
+    expect(Permission::count())->toBe(0);
 
     artisan('db:seed');
 
@@ -23,5 +22,5 @@ test('glowny DatabaseSeeder automatycznie uruchamia UserPermissionsSeeder przez 
         ]
     ]);
 
-    expect(Permission::count())->toBeGreaterThan(1);
+    expect(Permission::count())->toBeGreaterThan(0);
 });
