@@ -7,6 +7,7 @@ Lokalizacja modułów: **modules/{Module}** w projekcie Laravel.
 ```sh
 # Instalacja
 composer require spatie/laravel-permission
+php artisan install:api
 
 # Konfiguracja
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
