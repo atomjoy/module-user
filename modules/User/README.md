@@ -18,6 +18,14 @@ php artisan migrate
 0002_01_01_000003_create_permission_tables.php
 ```
 
+## Admin Seeder
+
+Koniecznie zmień adres email i hasło!!!
+
+```sh
+    modules/User/Database/Seeders/AdminSeeder.php
+```
+
 ## Composer
 
 composer.json
