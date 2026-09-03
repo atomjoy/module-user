@@ -2,13 +2,13 @@
 
 namespace Mod\User;
 
-use Mod\User\Contracts\ModulePermissions;
+use Mod\User\Abstracts\BaseModule;
 use Mod\User\Enums\Permissions\SystemPermission;
 
 /**
  * Module settings
  */
-class Module implements ModulePermissions
+class Module extends BaseModule
 {
     public static function getName(): string
     {

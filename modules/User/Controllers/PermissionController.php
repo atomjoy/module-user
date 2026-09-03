@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace Mod\User\Controllers;
 
 use App\Http\Controllers\Controller;
 use Mod\User\EnabledModules;

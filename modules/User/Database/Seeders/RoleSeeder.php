@@ -13,5 +13,9 @@ class RoleSeeder extends Seeder
         foreach (UserRole::cases() as $role) {
             Role::firstOrCreate(['name' => $role->value, 'guard_name' => 'web']);
         }
+
+        $this->call([
+            AdminSeeder::class
+        ]);
     }
 }
